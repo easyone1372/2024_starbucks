@@ -4,7 +4,8 @@ public enum ResponseStatus {
     SUCCESS(200, "Success"),
     ERROR(500,"Error"),
     NOT_FOUND(404,"Not Found"),
-    UNAUTHORIZED(401,"Unauthorized");
+    UNAUTHORIZED(401,"Unauthorized"),
+    FAIL(400,"Fail");
 
     private int code;
     private String description;

@@ -15,6 +15,7 @@ public class Coffee {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     @NonNull
+    @Column(name="Name")  //컬럼 연결
     private String name;
     @NonNull
     private int price;

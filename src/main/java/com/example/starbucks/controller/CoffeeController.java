@@ -29,7 +29,6 @@ public class CoffeeController {
     @Autowired
     CoffeeService coffeeService;
 
-
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<Coffee>>> getAllCoffees() {
         List<Coffee> coffeeList = coffeeService.getAllCoffees();
@@ -37,11 +36,12 @@ public class CoffeeController {
         return ResponseEntity.ok(apiResponse);
     }
 
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> addCoffee(@RequestBody Coffee coffee) {
         ResultStatus result = coffeeService.addCoffee(coffee);
         if(result.getResult().equals(ResultStatus.FAIL)){
-             ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS,"실패",null);
+             ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.FAIL,"실패",null);
              return ResponseEntity.ok(apiResponse);
         }else{
             ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS,"저장됨",null);
