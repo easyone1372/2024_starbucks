@@ -1,6 +1,6 @@
 package com.example.starbucks.status;
 
-public enum Status {
+public enum ResponseStatus {
     SUCCESS(200, "Success"),
     ERROR(500,"Error"),
     NOT_FOUND(404,"Not Found"),
@@ -9,7 +9,7 @@ public enum Status {
     private int code;
     private String description;
 
-    Status(int code, String description){
+    ResponseStatus(int code, String description){
         this.code=code;
         this.description=description;
     }

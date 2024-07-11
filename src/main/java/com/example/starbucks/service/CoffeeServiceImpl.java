@@ -2,10 +2,12 @@ package com.example.starbucks.service;
 
 import com.example.starbucks.model.Coffee;
 import com.example.starbucks.repository.CoffeeRepository;
+import com.example.starbucks.status.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CoffeeServiceImpl implements CoffeeService{
@@ -27,19 +29,25 @@ public class CoffeeServiceImpl implements CoffeeService{
 
     @Override
     public List<Coffee> getCoffeeByPrice(int min, int max) {
+
         return coffeeRepository.findByPrice(min,max);
     }
 
     @Override
-    public String addCoffee(Coffee coffee) {
+    public ResultStatus addCoffee(Coffee coffee) {
         if(coffee.getName() == null || coffee.getName().isEmpty()){
-            return "fail";
+            return ResultStatus.FAIL;
         }
         if(coffee.getPrice() < 0){
-            return "fail";
+            return ResultStatus.FAIL;
         }
 
         coffeeRepository.save(coffee);
-        return "success";
+        return ResultStatus.SUCCESS;
+    }
+
+    public Optional<Coffee> getCoffeeById(Integer id){
+        Optional<Coffee> coffee = coffeeRepository.findById(id);
+        return null;
     }
 }
