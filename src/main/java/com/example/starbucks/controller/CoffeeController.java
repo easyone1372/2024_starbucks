@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Result;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,40 +41,60 @@ public class CoffeeController {
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> addCoffee(@RequestBody Coffee coffee) {
         ResultStatus result = coffeeService.addCoffee(coffee);
-        if(result.getResult().equals(ResultStatus.FAIL)){
-             ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.FAIL,"실패",null);
-             return ResponseEntity.ok(apiResponse);
-        }else{
-            ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS,"저장됨",null);
-            return ResponseEntity.ok(apiResponse);
+        Boolean isEquals = ResultStatus.FAIL.equals(result);
+        if(isEquals) {
+            return ResponseEntity.ok(new ApiResponse(ResponseStatus.FAIL,"실패",null));
         }
+        else{
+            return ResponseEntity.ok(new ApiResponse(ResponseStatus.SUCCESS,"성공",null ));
+        }
+
+//        if(ResultStatus.FAIL.equals(result)){
+////             ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.FAIL,"실패",null);
+////            ApiResponse apiResponse = new ApiResponse(ResponseStatus.FAIL,"실패",null);
+//        return ResponseEntity.ok(new ApiResponse(ResponseStatus.FAIL,"실패",null));
+//
+//        }else{
+////            ApiResponse<String> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS,"저장됨",null);
+////            return ResponseEntity.ok(apiResponse);
+////            ApiResponse apiResponse = new ApiResponse(ResponseStatus.SUCCESS,"성공",null );
+//            return ResponseEntity.ok(new ApiResponse(ResponseStatus.SUCCESS,"성공",null ));
+//        }
     }
+
+    //? wildcard -> any
+    public ApiResponse<?> validateApiResponse(ResultStatus status){
+        ResponseStatus resultStatus = ResultStatus.FAIL.equals(status) ? ResponseStatus.FAIL : ResponseStatus.SUCCESS;
+        String message = ResultStatus.FAIL.equals(status) ? "실패 했음" : "성공 했음";
+        return new ApiResponse(resultStatus, message,null);
+//        두 데이터를 하나의 클래스로 만들어서 도출하는 식으로 만들 수 있음
+    }
+
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<Coffee>>> getCoffeeByName(@RequestParam String name) {
+    public ResponseEntity<ApiResponse<List<Coffee>>> getCoffeesByName(@RequestParam String name) {
         List<Coffee> coffeeList = coffeeService.getCoffeesByName(name);
-        ApiResponse<List<Coffee>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS,"성공",coffeeList);
-        return ResponseEntity.ok(apiResponse);
+       return ResponseEntity.ok(new ApiResponse<>(ResponseStatus.SUCCESS,"성공",coffeeList ));
     }
 
+
     //api/v1/coffee/coffeePrice?min=0&max=10000
-    @GetMapping("/coffeePrice")
-    public List<Coffee> getCoffeeByPrice(@RequestParam int min, @RequestParam int max) {
-        return coffeeService.getCoffeeByPrice(min,max);
+//    @GetMapping("/price")
+//    public List<Coffee> getCoffeesByPrice(@RequestParam int min, @RequestParam int max) {
+//        return coffeeService.getCoffeesByPrice(min,max);
+//    }
+
+    @GetMapping("/price")
+    public ResponseEntity<ApiResponse<List<Coffee>>> getCoffeesByPrice(@RequestParam int min, @RequestParam int max) {
+        List<Coffee> coffeeList = coffeeService.getCoffeesByPrice(min,max);
+        return ResponseEntity.ok(new ApiResponse<>(ResponseStatus.SUCCESS,"성공",coffeeList ));
     }
 
     //api/v1/coffee/130
-    @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<Coffee>> getCoffeeById(@PathVariable Integer id){
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Optional<Coffee>>> getCoffeeById(@PathVariable Integer id){
         Optional<Coffee> coffee = coffeeService.getCoffeeById(id);
-        if(coffee.isEmpty()){
-            ApiResponse<Coffee> apiResponse = new ApiResponse<>(ResponseStatus.NOT_FOUND,"정보 없음",null);
-            return ResponseEntity.ok(apiResponse);
-        }
-        else{
-            ApiResponse<Coffee> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS,"정보 존재",coffee.get());
-            return ResponseEntity.ok(apiResponse);
-        }
+      return ResponseEntity.ok(new ApiResponse<>(ResponseStatus.SUCCESS,"성공",coffee ));
 
     }
 }

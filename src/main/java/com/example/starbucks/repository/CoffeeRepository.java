@@ -19,6 +19,6 @@ public interface CoffeeRepository extends JpaRepository<Coffee, Integer> {
 
     List<Coffee> findByName(String name);
 
-    @Query("select c from Coffee c where c.price between :min and :max")
+    @Query(value = "select c from Coffee c where c.price between :min and :max")
     List<Coffee> findByPrice(@Param("min") int min, @Param("max") int max);
 }

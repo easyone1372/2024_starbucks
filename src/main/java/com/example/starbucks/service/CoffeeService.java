@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface CoffeeService {
     List<Coffee> getAllCoffees();
     List<Coffee> getCoffeesByName(String name);
-    List<Coffee> getCoffeeByPrice(int min, int max);
+    List<Coffee> getCoffeesByPrice(int min, int max);
     ResultStatus addCoffee(Coffee coffee);
     Optional<Coffee> getCoffeeById(Integer id);
 }

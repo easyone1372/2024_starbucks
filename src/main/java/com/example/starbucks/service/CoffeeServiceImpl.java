@@ -28,8 +28,7 @@ public class CoffeeServiceImpl implements CoffeeService{
     //name,price -> name(o, x) * price(o,x) = 4
 
     @Override
-    public List<Coffee> getCoffeeByPrice(int min, int max) {
-
+    public List<Coffee> getCoffeesByPrice(int min, int max) {
         return coffeeRepository.findByPrice(min,max);
     }
 
@@ -48,6 +47,6 @@ public class CoffeeServiceImpl implements CoffeeService{
 
     public Optional<Coffee> getCoffeeById(Integer id){
         Optional<Coffee> coffee = coffeeRepository.findById(id);
-        return null;
+        return coffee;
     }
 }

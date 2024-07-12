@@ -10,5 +10,4 @@ public class ApiResponse<T> {
     private ResponseStatus status;
     private String message;
     private T data;
-
 }
