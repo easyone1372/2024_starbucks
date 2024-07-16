@@ -9,13 +9,15 @@ import lombok.*;
 @RequiredArgsConstructor//new Coffee(name,price) by NonNull
 @Entity
 @Table(name="user")
-public class User {
+public class UserCustom {
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private int id;
 
+    //Id만 붙여서하는게 안되서 컬럼명을 _로 이어지게 하는 편이 낫다
+    //유독 id만 그러니 주의할것
     @NonNull
-    @Column(name="userId")
+    @Column(name="user_id")
     private String userId;
 
     @NonNull
