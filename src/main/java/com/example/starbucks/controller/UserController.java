@@ -6,7 +6,9 @@ import com.example.starbucks.service.UserDetailServiceImpl;
 import com.example.starbucks.service.UserService;
 import com.example.starbucks.status.ResponseStatus;
 import com.example.starbucks.status.ResultStatus;
+import com.example.starbucks.token.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,8 +60,16 @@ public class UserController {
            }
 
            //성공
+           //토큰 발급
+           String token = JwtUtil.generateToken(userCustom);
+
+           //response header
+           HttpHeaders httpHeaders = new HttpHeaders();
+           httpHeaders.set("Authorization","Bearer"+token);
+
+           //response body
            ApiResponse apiResponse = new ApiResponse(ResponseStatus.SUCCESS, "성공", null);
-           return ResponseEntity.ok(apiResponse);
+           return ResponseEntity.ok().headers(httpHeaders).body(apiResponse);
 
 
        } catch (UsernameNotFoundException | BadCredentialsException e) {
