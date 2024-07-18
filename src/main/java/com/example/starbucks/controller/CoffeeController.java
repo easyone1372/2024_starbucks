@@ -33,6 +33,7 @@ public class CoffeeController {
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<Coffee>>> getAllCoffees() {
         List<Coffee> coffeeList = coffeeService.getAllCoffees();
+        System.out.println(coffeeList);
         ApiResponse<List<Coffee>> apiResponse = new ApiResponse<>(ResponseStatus.SUCCESS, "성공", coffeeList);
         return ResponseEntity.ok(apiResponse);
     }

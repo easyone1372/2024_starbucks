@@ -5,6 +5,8 @@ package com.example.starbucks;
 //spring security -> SecurityConfig 설정
 
 
+import com.example.starbucks.token.JwtFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,11 +15,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 
 public class SecurityConfig {
+
+    @Autowired
+    private JwtFilter jwtFilter;
+
 
     // 패스워드 암호화 해주는 함수
     // pw: qwer1234를 그대로 노출x
@@ -38,7 +45,10 @@ public class SecurityConfig {
                 sessionManagement(x->x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//세션 기반 x
                 .authorizeHttpRequests(x->
                         x.requestMatchers("**").permitAll() //누구든지 우리의 모든 파일(**) 접근 가능(permitAll())
-                        .anyRequest().authenticated()); //아무 request를 인증해야함
+                        .anyRequest().authenticated())               //아무 request를 인증해야함
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+
         // atomic 패턴
         // component -> atom(가장 작게 쪼개서 원자)/molecules(두개 이상, 둘의 기준점은 다 다르다, props 두 단계) / organism(3개 이상. props 한단계)
         // build 패턴
